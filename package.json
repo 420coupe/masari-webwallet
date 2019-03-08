@@ -1,7 +1,7 @@
 {
-  "name": "masariwebwallet",
+  "name": "aeonwebwallet",
   "version": "1.0.0",
-  "description": "Fully client side web wallet for masari",
+  "description": "Fully client side web wallet for aeon",
   "main": "index.js",
   "dependencies": {
     "typescript": "^2.9.2",
