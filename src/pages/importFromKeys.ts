@@ -83,7 +83,7 @@ class ImportView extends DestructableView{
 				console.log(1);
 				let viewkey = self.privateViewKey.trim();
 				if(viewkey === ''){
-					viewkey = cnUtil.generate_keys(CnUtil.cn_fast_hash(self.privateSpendKey.trim())).sec;
+					viewkey = cnUtil.generate_keys(cnUtil.cn_fast_hash(self.privateSpendKey.trim())).sec;
 				}
 				console.log(1, viewkey);
 				newWallet.keys = KeysRepository.fromPriv(self.privateSpendKey.trim(), viewkey);

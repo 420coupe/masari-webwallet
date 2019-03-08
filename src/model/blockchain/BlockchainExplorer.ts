@@ -28,3 +28,4 @@ export type RawDaemon_RctSignature = {
 
 export interface BlockchainExplorer{
 	getHeight() : Promise<number>;
+}

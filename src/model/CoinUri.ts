@@ -33,7 +33,7 @@ export class CoinUri{
 				throw 'missing_address';
 
 			try {
-				CnUtil.decode_address(exploded[0]);
+				cnUtil.decode_address(exploded[0]);
 			}catch(e){
 				throw 'invalid_address_length';
 			}
@@ -78,7 +78,7 @@ export class CoinUri{
 	static encodeTx(address : string, paymentId:string|null = null, amount : string|null=null, recipientName:string|null = null, description : string|null=null) : string{
 		let encoded = this.coinTxPrefix + address;
 		try {
-			CnUtil.decode_address(address);
+			cnUtil.decode_address(address);
 		}catch(e){
 			throw 'invalid_address_length';
 		}
@@ -107,7 +107,7 @@ export class CoinUri{
 				throw 'missing_address';
 
 			try {
-				CnUtil.decode_address(exploded[0]);
+				cnUtil.decode_address(exploded[0]);
 			}catch(e){
 				throw 'invalid_address_length';
 			}
@@ -166,7 +166,7 @@ export class CoinUri{
 	static encodeWalletKeys(address : string, spendKey : string, viewKey : string|null=null, height:number|null=null, encryptMethod:string|null=null,nonce:string|null=null){
 		let encoded = this.coinWalletPrefix + address;
 		try {
-			CnUtil.decode_address(address);
+			cnUtil.decode_address(address);
 		}catch(e){
 			throw 'invalid_address_length';
 		}

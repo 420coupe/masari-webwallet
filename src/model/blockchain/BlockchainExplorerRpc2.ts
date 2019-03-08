@@ -381,7 +381,7 @@ export class BlockchainExplorerRpc2 implements BlockchainExplorer{
 				}while(selectedIndex === -1 || randomBlocksIndexesToGet.indexOf(selectedIndex) !== -1);
 				randomBlocksIndexesToGet.push(selectedIndex);
 
-				let promise = self.getTransactionsForBlocks(Math.floor(selectedIndex/100)*100).then(function(rawTransactions : RawDaemon_Transaction[]){
+				let promise = self.getTransactionsForBlocks(Math.floor(selectedIndex/100)*100).then(function(rawTransactions : RawDaemonTransaction[]){
 					txs.push.apply(txs,rawTransactions);
 				});
 				promises.push(promise);
@@ -419,7 +419,7 @@ export class BlockchainExplorerRpc2 implements BlockchainExplorer{
 							globalIndex += tx.global_index_start;
 
 						if(tx.vout[output_idx_in_tx].amount !== 0){//check if miner tx
-							rct = cnUtil.zeroCommit(CnUtil.d2s(tx.vout[output_idx_in_tx].amount));
+							rct = cnUtil.zeroCommit(cnUtil.d2s(tx.vout[output_idx_in_tx].amount));
 						}else {
 							let rtcOutPk = tx.rct_signatures.outPk[output_idx_in_tx];
 							let rtcMask = tx.rct_signatures.ecdhInfo[output_idx_in_tx].mask;
