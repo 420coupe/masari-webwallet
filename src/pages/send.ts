@@ -25,7 +25,7 @@ import {QRReader} from "../model/QRReader";
 import {AppState} from "../model/AppState";
 import {BlockchainExplorerProvider} from "../providers/BlockchainExplorerProvider";
 import {NdefMessage, Nfc} from "../model/Nfc";
-import {Cn} from "../model/Cn";
+
 
 let wallet: Wallet = DependencyInjectorInstance().getInstance(Wallet.name, 'default', false);
 let blockchainExplorer: BlockchainExplorerRpc2 = BlockchainExplorerProvider.getInstance();
@@ -395,7 +395,7 @@ class SendView extends DestructableView {
 		} else {
 			this.openAliasValid = true;
 			try {
-				Cn.decode_address(this.destinationAddressUser);
+				cnUtil.decode_address(this.destinationAddressUser);
 				this.destinationAddressValid = true;
 				this.destinationAddress = this.destinationAddressUser;
 			} catch (e) {
