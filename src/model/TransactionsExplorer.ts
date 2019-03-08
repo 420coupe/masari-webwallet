@@ -351,7 +351,7 @@ export class TransactionsExplorer {
 				if (out.rtcAmount !== '') {
 					rct = out.rtcOutPk + out.rtcMask + out.rtcAmount;
 				} else {
-					rct = cnUtil.zeroCommit(cnUtil.d2s(out.amount));
+					rct = cnUtil.zeroCommit(CnUtils.d2s(out.amount));
 				}
 				unspentOuts.push({
 					keyImage: out.keyImage,

@@ -363,12 +363,11 @@ export class BlockchainExplorerRpc2 implements BlockchainExplorer{
 
 		return this.getHeight().then(function(height : number){
 			let txs : RawDaemonTransaction[] = [];
-			let promiseGetCompressedBlocks : Promise<void> = Promise.resolve();
+			let promises = [];
 
 			let randomBlocksIndexesToGet : number[] = [];
 			let numOuts = height;
 
-			let compressedBlocksToGet : {[key : string] : boolean} = {};
 
 			console.log('Requires '+nbOutsNeeded+' outs');
 
@@ -382,22 +381,13 @@ export class BlockchainExplorerRpc2 implements BlockchainExplorer{
 				}while(selectedIndex === -1 || randomBlocksIndexesToGet.indexOf(selectedIndex) !== -1);
 				randomBlocksIndexesToGet.push(selectedIndex);
 
-				compressedBlocksToGet[Math.floor(selectedIndex/100)*100] = true;
-			}
-
-			console.log('Random blocks required: ', randomBlocksIndexesToGet);
-			console.log('Blocks to get for outputs selections:', compressedBlocksToGet);
-
-			//load compressed blocks (100 blocks) containing the blocks referred by their index
-			for(let compressedBlock in compressedBlocksToGet) {
-				promiseGetCompressedBlocks = promiseGetCompressedBlocks.then(()=>{
-					return self.getTransactionsForBlocks(parseInt(compressedBlock)).then(function (rawTransactions: RawDaemonTransaction[]) {
-						txs.push.apply(txs, rawTransactions);
-					});
+				let promise = self.getTransactionsForBlocks(Math.floor(selectedIndex/100)*100).then(function(rawTransactions : RawDaemon_Transaction[]){
+					txs.push.apply(txs,rawTransactions);
 				});
+				promises.push(promise);
 			}
 
-			return promiseGetCompressedBlocks.then(function(){
+			return Promise.all(promises).then(function(){
 				console.log('txs selected for outputs: ', txs);
 				let txCandidates : any = {};
 				for(let iOut  = 0; iOut < txs.length; ++iOut) {
