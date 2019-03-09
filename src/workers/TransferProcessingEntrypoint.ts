@@ -19,5 +19,7 @@ try {
 		require(['./TransferProcessing.js'], function (App) {});
 	};
 }catch(e){
-	//TODO send error
+	setTimeout(function(){//wait 5s due to crypto //TODO find a better fix
+		require(['./TransferProcessing.js'], function (App) {});
+	}, 5*1000);
 }

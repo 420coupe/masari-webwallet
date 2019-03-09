@@ -87,7 +87,8 @@ function createOptimizedBock($startHeight, $endHeight){
 				$minerTx['global_index_start'] = $outCount;
 				$minerTx['ts'] = $blockTimes[$height];
 				$finalTransactions[] = $minerTx;
-				++$outCount;
+				$voutCount = count($minerTx['vout']);
+				$outCount += $voutCount;
 				break;
 			}
 		}
@@ -102,18 +103,24 @@ function createOptimizedBock($startHeight, $endHeight){
 		$resp = curl_exec($curl);
 		$decodedJson = json_decode($resp, true);
 		if(isset($decodedJson['txs_as_json'])){
-			$rawTransactionsJson = [];	
-			$rawTransactions = [];	
-		}else{
 			$rawTransactionsJson = $decodedJson['txs_as_json'];
 			$rawTransactions = $decodedJson['txs'];
+		} else if(isset($decodedJson['txs']) && count($decodedJson['txs']) > 0){
+			$rawTransactionsJson = [];
+			foreach($decodedJson['txs'] as $tx){
+				$rawTransactionsJson[] = $tx['as_json'];
+			}
+			$rawTransactions = $decodedJson['txs'];
+		} else{
+			$rawTransactionsJson = [];
+			$rawTransactions = [];
 		}
 		
 		for($iTransaction = 0; $iTransaction < count($rawTransactionsJson); ++$iTransaction){
 			$rawTransactionJson = $rawTransactionsJson[$iTransaction];
 			$rawTransaction = $rawTransactions[$iTransaction];
 			$finalTransaction = json_decode($rawTransactionJson, true);
-			unset($finalTransaction['rctsig_prunable']);
+			//unset($finalTransaction['rctsig_prunable']);
 			$finalTransaction['global_index_start'] = $outCount;
 			$finalTransaction['ts'] = $rawTransaction['block_timestamp'];
 			$finalTransaction['height'] = $height;
@@ -257,10 +264,6 @@ if(getenv('generate') !== 'true'){
 				
 				var_dump("generating...");
 				$cacheContent = createOptimizedBock($realStartHeight, $endHeight);
-				if($realStartHeight > 100 && $realStartHeight % 100 <= 30 && $blockchainHeight-$realStartHeight <= 200){//in case of a reorg, not clean, only for recent blocks
-					$cacheContentPreviousChunk = createOptimizedBock($realStartHeight-100, $endHeight);
-					saveCache($realStartHeight-100, $realStartHeight, $cacheContentPreviousChunk);
-				}
 				saveCache($realStartHeight, $endHeight, $cacheContent);
 				$cacheContent = json_encode($cacheContent);
 			}

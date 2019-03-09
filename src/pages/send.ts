@@ -30,7 +30,6 @@ import {BlockchainExplorerProvider} from "../providers/BlockchainExplorerProvide
 import {VueFilterPiconero} from "../filters/Filters";
 import {NdefMessage, Nfc} from "../model/Nfc";
 
-
 let wallet: Wallet = DependencyInjectorInstance().getInstance(Wallet.name, 'default', false);
 let blockchainExplorer: BlockchainExplorerRpc2 = BlockchainExplorerProvider.getInstance();
 
@@ -340,7 +339,7 @@ class SendView extends DestructableView {
 					});
 					swal.close();
 				}).catch(function (error: any) {
-					console.error(error);
+					console.log(error);
 					if (error && error !== '') {
 						if (typeof error === 'string')
 							swal({
